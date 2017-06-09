@@ -1,65 +1,40 @@
-var connection = require('../config/connection.js');
-function printQuestionMarks(num){
-	var arr = [];
-
-	for (var i = 0; i < num; i++){
-		arr.push('?')
-	}
-
-	return arr.toString();
-}
-
-function addToSQL(ob){
-	var arr = [];
-
-	for (var key in ob){
-		arr.push(key + '=' + ob[key]);
-	}
-	return arr.toString();
-}
+var connection = require('./../config/connection');
 
 var orm = {
-	all: function(tableInput, cb){
-		var queryString = 'SELECT * FROM' + tableInput + ';';
-		connection.query(queryString, function(err, result){
-			if (err) throw err;
-			cb(result);
-		});
-	},
-	create: function(table, cols, vals, cb) {
-      var queryString = 'INSERT INTO ' + table;
+  selectAll: function(table, callback) {
+    connection.query('SELECT * FROM ' + table, function(err, result){
+      if (err) throw err;
+      callback(result);
+    });
+  },
 
-      queryString = queryString + ' (';
-      queryString = queryString + cols.toString();
-      queryString = queryString + ') ';
-      queryString = queryString + 'VALUES (';
-      queryString = queryString + printQuestionMarks(vals.length);
-      queryString = queryString + ') ';
+  insertOne: function(table, columns, values, callback) {
+    var queryString = "INSERT INTO ";
+    queryString += table;
+    queryString += ' (';
+    queryString += columns;
+    queryString += ') VALUES (';
+    queryString += '"' + values[0] + '", "' + values[1] + '", ' + values[2];
+    queryString += ')';
+    connection.query(queryString, function(err, result) {
+      if (err) throw err;
+      callback(result);
+    });
+  },
 
-      console.log(queryString)
+  updateOne: function(table, values, condition, callback) {
+    var queryString = 'UPDATE ';
+    queryString += table;
+    queryString += ' SET ';
+    queryString += values;
+    queryString += ' WHERE ';
+    queryString += condition;
+    connection.query(queryString, function(err, result) {
+      if (err) throw err;
+      callback(result);
+    });
+  }
 
-      connection.query(queryString, vals, function(err, result) {
-        if (err) throw err;
-        cb(result);
-      });
-    },
-    //objColVals would be the columns and values that you want to update
-    //an example of objColVals would be {name: panther, sleepy: true}
-    update: function(table, objColVals, condition, cb) {
-      var queryString = 'UPDATE ' + table;
-
-      queryString = queryString + ' SET ';
-      queryString = queryString + objToSql(objColVals);
-      queryString = queryString + ' WHERE ';
-      queryString = queryString + condition;
-
-      console.log(queryString)
-      connection.query(queryString, function(err, result) {
-        if (err) throw err;
-        cb(result);
-      });
-    }
 };
 
 module.exports = orm;
-

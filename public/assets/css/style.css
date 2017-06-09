@@ -1,0 +1,48 @@
+body{
+	background-color: #ee2323;
+	color: #ffffff;
+}
+
+h1, h2{
+	text-align: center;
+}
+
+ul {
+	list-style: none;
+}
+
+.item {
+
+	display: block;
+}
+
+
+#uneatenburgers {
+	margin-left: 10%;
+	width: 30%;
+	display: inline-block;
+}
+
+
+
+#eatenburgers {
+	margin-right: 10%;
+	width: 30%;
+	display: inline-block;
+
+}
+
+
+
+
+#burgerimage {
+	width: 20%;
+	margin-left: 40%;
+
+
+}
+
+.burgerbutton {
+	
+	text-align: center;
+}
